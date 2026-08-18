@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bali 2026">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<title>Bali 2026</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f5f6f7;--card:#fff;--ink:#111827;--muted:#667085;--line:#e5e7eb;
+  --nav:#111827;--soft:#f2f4f7;--good:#ecfdf3;--warn:#fff7ed;--blue:#eff6ff;
+  --shadow:0 8px 28px rgba(17,24,39,.08)
+}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding-bottom:84px}
+button,a,input{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.head{max-width:860px;margin:auto;padding:12px 14px 10px;display:flex;align-items:center;gap:10px}
+.brand{flex:1}.title{font-size:20px;font-weight:900}.sub{font-size:11px;color:var(--muted);margin-top:2px}
+.iconbtn{border:1px solid var(--line);background:white;width:40px;height:40px;border-radius:13px;font-size:17px}
+.days{display:flex;gap:7px;overflow:auto;padding:8px 14px 10px;scrollbar-width:none;border-top:1px solid #f4f4f5}
+.days::-webkit-scrollbar{display:none}
+.daypill{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:8px 11px;font-weight:800;font-size:12px}
+.daypill.active{background:var(--nav);color:white;border-color:var(--nav)}
+main{max-width:860px;margin:auto;padding:12px}
+.view{display:none}.view.active{display:block}
+.hero{background:linear-gradient(140deg,#111827,#263244);color:white;border-radius:22px;padding:17px;margin-bottom:12px;box-shadow:var(--shadow)}
+.eyebrow{font-size:11px;letter-spacing:.04em;text-transform:uppercase;opacity:.72;font-weight:800}
+.hero h2{font-size:23px;line-height:1.12;margin:5px 0 6px}.hero .base{font-size:13px;opacity:.82}
+.hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.primary,.secondary{border:0;border-radius:13px;padding:11px 10px;font-size:12px;font-weight:900;text-decoration:none;text-align:center}
+.primary{background:white;color:#111827}.secondary{background:rgba(255,255,255,.12);color:white;border:1px solid rgba(255,255,255,.2)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:13px;margin-bottom:10px}
+.card.good{background:var(--good);border-color:#bbf7d0}.card.warn{background:var(--warn);border-color:#fed7aa}.card.blue{background:var(--blue);border-color:#bfdbfe}
+.sectionhead{display:flex;align-items:center;gap:8px;margin-bottom:10px}.sectiontitle{font-size:15px;font-weight:900;flex:1}.small{font-size:12px;color:var(--muted);line-height:1.5}
+.next{display:flex;gap:10px;align-items:flex-start}
+.nexticon{width:42px;height:42px;border-radius:14px;background:#111827;color:white;display:flex;align-items:center;justify-content:center;font-size:20px;flex:0 0 auto}
+.nextbody{flex:1}.nextname{font-weight:900;font-size:14px}.nextmeta{font-size:11px;color:var(--muted);margin-top:3px}
+.chips{display:flex;gap:6px;overflow:auto;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:white;border-radius:999px;padding:7px 10px;font-size:11px;font-weight:800}
+.chip.active{background:#111827;color:white;border-color:#111827}
+.timeline{position:relative}
+.step{display:grid;grid-template-columns:56px 31px 1fr;gap:7px;padding-bottom:12px;position:relative}
+.step:not(:last-child):before{content:"";position:absolute;left:70px;top:31px;bottom:-3px;width:2px;background:#e5e7eb}
+.time{font-size:10.5px;color:var(--muted);font-weight:800;padding-top:8px}
+.stepicon{width:31px;height:31px;border-radius:50%;background:#f2f4f7;display:flex;align-items:center;justify-content:center;z-index:1}
+.stepbody{border:1px solid var(--line);background:white;border-radius:14px;padding:10px}
+.stepbody.done{opacity:.55}.stepbody.done .stepname{text-decoration:line-through}
+.stephead{display:flex;gap:7px;align-items:flex-start}.check{width:20px;height:20px;margin:0;accent-color:#111827}
+.stepname{font-size:13.5px;font-weight:900;flex:1}.duration{font-size:9.5px;font-weight:900;background:#f2f4f7;border-radius:999px;padding:4px 7px;white-space:nowrap}
+.note{font-size:11.5px;color:var(--muted);line-height:1.45;margin-top:5px}
+.rowactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.mini{display:inline-flex;align-items:center;gap:4px;border:1px solid #d0d5dd;background:white;color:#111827;text-decoration:none;border-radius:9px;padding:6px 8px;font-size:10.5px;font-weight:800}
+.quickgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.quick{border:1px solid var(--line);border-radius:15px;background:white;padding:11px}
+.quick b{display:block;font-size:18px}.quick span{font-size:10.5px;color:var(--muted)}
+.foodarea{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.select{flex:1;border:1px solid var(--line);background:white;border-radius:12px;padding:10px;font-weight:800;color:#111827}
+.foodcard{border:1px solid var(--line);background:white;border-radius:15px;padding:11px;margin-bottom:8px}
+.foodtop{display:flex;gap:8px;align-items:flex-start}.foodname{font-weight:900;font-size:13px;flex:1}.tag{font-size:9.5px;font-weight:900;background:#f2f4f7;border-radius:999px;padding:4px 7px}
+.fooddesc{font-size:11px;color:var(--muted);margin-top:4px}
+.hotel{display:flex;gap:10px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}.hotel:last-child{border-bottom:0}
+.hotelicon{font-size:23px}.hotelbody{flex:1}.hotelname{font-size:13px;font-weight:900}.hotelmeta{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+.decision{padding:11px;border:1px solid var(--line);border-radius:15px;background:white;margin-bottom:8px}.decision:last-child{margin-bottom:0}
+.decisiontop{display:flex;gap:8px;align-items:flex-start}.decisiontitle{font-weight:900;font-size:13px;flex:1}.status{font-size:9.5px;font-weight:900;border-radius:999px;padding:4px 7px;background:#fff7ed}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:60;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+.navbtn{border:0;background:transparent;padding:8px 2px;color:#667085;font-size:9.5px;font-weight:900}.navbtn span{display:block;font-size:19px;margin-bottom:2px}.navbtn.active{color:#111827}
+.hidden{display:none!important}
+.search{width:100%;border:1px solid var(--line);background:white;border-radius:13px;padding:10px 12px;margin-bottom:10px;outline:none}
+.progress{height:7px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin-top:8px}.bar{height:100%;background:#111827;border-radius:99px}
+.progresslabel{font-size:10.5px;color:var(--muted);margin-top:5px}
+@media(min-width:700px){
+ body{padding-bottom:0}.bottom{position:sticky;bottom:auto;top:0}.step{grid-template-columns:76px 35px 1fr}.step:not(:last-child):before{left:93px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="head">
+  <div class="brand"><div class="title">🇮🇩 Bali 2026</div><div class="sub">5–18 septiembre · 4 adultos · 13 noches</div></div>
+  <button class="iconbtn" onclick="goToday()" title="Ir a hoy">Hoy</button>
+  <button class="iconbtn" onclick="shareTrip()" title="Compartir">↗</button>
+ </div>
+ <div class="days" id="dayStrip"></div>
+</header>
+
+<main>
+<section id="dayView" class="view active"></section>
+
+<section id="foodView" class="view">
+ <div class="hero"><div class="eyebrow">COMIDAS</div><h2>Opciones buenas sin desviar la ruta</h2><div class="base">Varias alternativas por desayuno, comida y cena. Toca Maps para abrir el sitio.</div></div>
+ <div class="card">
+  <div class="foodarea"><select class="select" id="foodArea" onchange="renderFood()"></select></div>
+  <div class="chips" id="mealChips"></div>
+ </div>
+ <div id="foodList"></div>
+</section>
+
+<section id="tripView" class="view">
+ <div class="hero"><div class="eyebrow">VIAJE</div><h2>Ruta, decisiones y progreso</h2><div class="base">Lo fijado se mantiene. Las decisiones reales están separadas para no confundir opciones con reservas.</div></div>
+ <div class="quickgrid">
+  <div class="quick"><b>8</b><span>alojamientos</span></div>
+  <div class="quick"><b>3</b><span>fast boats por cerrar</span></div>
+  <div class="quick"><b>4</b><span>noches Ubud</span></div>
+  <div class="quick"><b>4</b><span>adultos</span></div>
+ </div>
+ <div class="card" style="margin-top:10px"><div class="sectionhead"><div class="sectiontitle">Decisiones pendientes</div></div><div id="decisionList"></div></div>
+ <div class="card good"><div class="sectionhead"><div class="sectiontitle">Cambios de la auditoría ya aplicados</div></div>
+  <div class="small">✅ Kecak en Uluwatu, no Tanah Lot · ✅ Sindhu Night Market en Sanur · ✅ Thousand Islands en Penida Este · ✅ Turtle Point condicional en Gili T · ✅ Sweet Orange Walk sustituye Campuhan.</div>
+ </div>
+</section>
+
+<section id="hotelView" class="view">
+ <div class="hero"><div class="eyebrow">HOTELES</div><h2>Alojamientos confirmados</h2><div class="base">Mapa directo y alertas logísticas importantes.</div></div>
+ <div class="card" id="hotelList"></div>
+</section>
+
+<section id="transportView" class="view">
+ <div class="hero"><div class="eyebrow">TRANSPORTE</div><h2>Barcos, Grab/Gojek y cambios de hotel</h2><div class="base">Los horarios de fast boat no se consideran cerrados hasta comprar billetes.</div></div>
+ <div id="transportList"></div>
+</section>
+</main>
+
+<nav class="bottom">
+ <button class="navbtn active" data-view="dayView" onclick="showView('dayView',this)"><span>🗓️</span>Días</button>
+ <button class="navbtn" data-view="foodView" onclick="showView('foodView',this)"><span>🍽️</span>Comidas</button>
+ <button class="navbtn" data-view="tripView" onclick="showView('tripView',this)"><span>🧭</span>Viaje</button>
+ <button class="navbtn" data-view="hotelView" onclick="showView('hotelView',this)"><span>🏨</span>Hoteles</button>
+ <button class="navbtn" data-view="transportView" onclick="showView('transportView',this)"><span>⛴️</span>Transporte</button>
+</nav>
+
+<script>
+const APP_DATA = {"days": [{"date": "2026-09-05", "label": "Sáb 5 sep", "base": "Canggu · Wiras Village", "summary": "Llegada + primera noche en Canggu", "items": [["17:35", "✈️", "Aterrizaje en DPS", "60–90 min", null, null, "Inmigración + equipaje. No programar nada con hora fija."], ["18:45", "🚗", "DPS → Wiras Village", "60–90 min", "DPS Airport", "Wiras Village", "Comparar Grab y Gojek. Para 4 adultos + equipaje, priorizar GrabCar XL / GoCar XL."], ["20:15", "🏨", "Check-in en Wiras Village", "20–30 min", null, null, "Dejar equipaje y ducha rápida."], ["20:45", "🚶", "Cena + paseo nocturno por Batu Bolong", "libre", "Wiras Village", "Batu Bolong Beach", "Primera toma de contacto andando. Nada exigente."]]}, {"date": "2026-09-06", "label": "Dom 6 sep", "base": "Canggu · Wiras Village", "summary": "Canggu + Tanah Lot al sunset", "items": [["09:00", "☕", "Desayuno en Canggu", "45–60 min", null, null, "Elegir cerca de Batu Bolong/Nelayan para no perder tiempo."], ["10:00", "🚶", "Wiras → Batu Bolong", "10–15 min", "Wiras Village", "Batu Bolong Beach", "Moverse andando."], ["10:15", "🏄", "Batu Bolong Beach + surf", "1 h 45", null, null, "Actividad recomendada: clase de surf si os apetece probarlo."], ["12:00", "🚶", "Batu Bolong → Echo Beach", "20–25 min", "Batu Bolong Beach", "Echo Beach / La Brisa", "Por la costa si la marea acompaña; ride corto si hace calor."], ["12:30", "🍽️", "Echo Beach + comida", "1 h 30", null, null, "Ambiente de Canggu. No añadir Pererenan salvo que sobre tiempo."], ["14:00", "🚗", "Echo Beach → Wiras Village", "10–20 min", "Echo Beach / La Brisa", "Wiras Village", "Ducha y cambiarse."], ["15:20", "🚗", "Wiras → Tanah Lot", "35–55 min", "Wiras Village", "Tanah Lot", "Salir con margen por tráfico."], ["16:10", "🛕", "Tanah Lot + Batu Bolong Temple + miradores", "2 h 15", null, null, "Recorrer el complejo y quedarse hasta el atardecer. Sin Kecak aquí."], ["18:30", "🚗", "Tanah Lot → Canggu", "40–60 min", "Tanah Lot", "Wiras Village", "Regreso tras el sunset."], ["19:45", "🍽️", "Cena + última noche en Canggu", "libre", null, null, "Batu Bolong / centro andando desde el hotel."]]}, {"date": "2026-09-07", "label": "Lun 7 sep", "base": "Seminyak · Wayan House", "summary": "Seminyak: playa + Eat Street + sunset + noche", "items": [["09:00", "☕", "Desayuno + checkout Canggu", "1 h 15", null, null, "Mañana tranquila."], ["10:30", "🚗", "Wiras Village → Wayan House Seminyak", "45–75 min", "Wiras Village", "Wayan House Seminyak", "Dejar equipaje aunque la habitación aún no esté lista."], ["11:45", "🚗", "Wayan House → Double Six / Seminyak Beach", "10–15 min", "Wayan House Seminyak", "Seminyak Beach", ""], ["12:00", "🏖️", "Seminyak Beach + comida", "2 h", null, null, "Playa, paseo y comida sin prisas."], ["14:15", "🛍️", "Kayu Aya / Eat Street + tiendas", "2 h", null, null, "Shooters queda como actividad opcional si os apetece algo distinto."], ["16:20", "🍹", "La Plancha + sunset", "2 h 10", null, null, "Un solo spot de sunset; no encadenar beach clubs."], ["18:40", "🚗", "Playa → Wayan House", "10–20 min", "Seminyak Beach", "Wayan House Seminyak", "Ducha y cambiarse."], ["20:30", "🍽️", "Cena en Seminyak", "1 h 30–2 h", null, null, "Motel Mexicola si queréis ambiente; hay alternativas en la pestaña Comidas."], ["22:30+", "🕺", "La Favela opcional", "libre", null, null, "Solo si queréis seguir de fiesta."]]}, {"date": "2026-09-08", "label": "Mar 8 sep", "base": "Uluwatu/Bukit · Rumah Menik", "summary": "Seminyak → Thomas + Suluban", "items": [["09:00", "☕", "Desayuno + paseo final Seminyak", "1 h 30", null, null, ""], ["10:45", "🧳", "Recoger equipaje / checkout", "30 min", null, null, ""], ["11:15", "🚗", "Wayan House → Rumah Menik", "60–90 min", "Wayan House Seminyak", "Rumah Menik", "Dejar equipaje/check-in."], ["13:00", "🚗", "Rumah Menik → Thomas Beach", "20–30 min", "Rumah Menik", "Thomas Beach", "Thomas queda fijada provisionalmente; Nyang Nyang aparece como alternativa en Pendientes."], ["13:30", "🏖️", "Thomas Beach + comida", "1 h 45", null, null, "Playa y descanso."], ["15:20", "🚗", "Thomas → Suluban / Single Fin", "10–15 min", "Thomas Beach", "Uluwatu Temple", "Referencia de Maps para la zona de Suluban."], ["15:35", "🌊", "Suluban + cueva + surf / Single Fin", "2 h 30", null, null, "Ver la cueva, surfistas y ambiente de tarde."], ["18:15", "🚗", "Suluban → Rumah Menik", "25–40 min", "Uluwatu Temple", "Rumah Menik", "Ducha y cena por Uluwatu/Pecatu."]]}, {"date": "2026-09-09", "label": "Mié 9 sep", "base": "Uluwatu/Bukit · Rumah Menik", "summary": "Melasti + Padang Padang + Uluwatu Kecak", "items": [["08:30", "🚗", "Rumah Menik → Melasti Beach", "30–40 min", "Rumah Menik", "Melasti Beach", "Salir temprano."], ["09:10", "🏖️", "Melasti Beach", "2 h 20", null, null, "Playa principal del día: acantilados y tiempo real para bañarse."], ["11:30", "🚗", "Melasti → Padang Padang", "25–35 min", "Melasti Beach", "Padang Padang Beach", ""], ["12:05", "🏖️", "Padang Padang / Labuan Sait", "1 h 20", null, null, "Ver la playa icónica sin dedicarle media jornada."], ["13:30", "🍽️", "Comida + descanso", "1 h 15", null, null, "No añadir otra playa grande antes del templo."], ["14:50", "🚗", "Padang Padang → Pura Uluwatu", "10–15 min", "Padang Padang Beach", "Uluwatu Temple", "Llegar con margen para templo y Kecak."], ["15:10", "🛕", "Pura Luhur Uluwatu + cliff walk", "2 h 20", null, null, "Guardar gafas, móvil y objetos sueltos por los monos."], ["17:30", "🎟️", "Acceso / asiento para Kecak", "30 min", null, null, "No dejar la entrada para última hora."], ["18:00", "🔥", "Kecak Dance Uluwatu", "1 h", null, null, "Kecak al sunset sobre el océano."], ["19:10", "🚗", "Uluwatu Temple → Rumah Menik", "25–45 min", "Uluwatu Temple", "Rumah Menik", "Puede haber atasco al salir."], ["20:00", "🍽️", "Cena Uluwatu", "libre", null, null, ""]]}, {"date": "2026-09-10", "label": "Jue 10 sep", "base": "Sanur · Mesari Homestay", "summary": "Uluwatu → Sanur + night market", "items": [["08:30", "☕", "Mañana tranquila en Uluwatu", "2 h", null, null, "Desayuno, piscina y recoger."], ["11:00", "🧳", "Checkout Rumah Menik", "30 min", null, null, ""], ["11:30", "🚗", "Rumah Menik → Mesari Homestay", "70–100 min", "Rumah Menik", "Mesari Homestay", "Día de transición; sin excursiones grandes."], ["14:00", "🏨", "Check-in / descanso", "1 h", null, null, ""], ["15:15", "🚗", "Mesari → Sanur Beach", "10–15 min", "Mesari Homestay", "Sanur Beach", ""], ["15:30", "🚶", "Paseo por Sanur Beach", "1 h 30–2 h", null, null, "Paseo marítimo y tarde tranquila."], ["18:00", "🍢", "Sindhu Night Market", "1 h 30–2 h", null, null, "Cena de puestos locales. Añadido de la auditoría."], ["20:15", "🚗", "Night Market → Mesari", "10–20 min", null, "Mesari Homestay", "Dormir pronto antes del fast boat."]]}, {"date": "2026-09-11", "label": "Vie 11 sep", "base": "Nusa Penida · Waterside Inn", "summary": "Penida Este: Diamond + Atuh + Thousand Islands", "items": [["06:00", "🌅", "Amanecer / paseo corto por Sanur", "30–40 min", null, null, "Solo si el horario del barco deja margen."], ["06:45", "☕", "Desayuno rápido + recoger", "30–45 min", null, null, ""], ["07:30", "🚗", "Mesari → Sanur Harbour", "10–15 min", "Mesari Homestay", "Sanur Harbour", ""], ["08:15 aprox.", "⛴️", "Fast boat Sanur → Penida", "35–50 min", "Sanur Harbour", "Sampalan Harbour", "Horario provisional hasta comprar billete."], ["09:15", "🚗", "Sampalan → Waterside Inn", "10–15 min", "Sampalan Harbour", "Waterside Inn Nusa Penida", "Dejar equipaje."], ["10:00", "🚗", "Waterside → Goa Giri Putri", "15–25 min", "Waterside Inn Nusa Penida", "Goa Giri Putri", "Si el barco se retrasa, esta es la primera parada que se elimina."], ["10:30", "🛕", "Goa Giri Putri", "45–60 min", null, null, ""], ["11:30", "🚗", "Goa Giri Putri → Diamond Beach", "30–45 min", "Goa Giri Putri", "Diamond Beach", ""], ["12:15", "🏝️", "Diamond Beach", "1 h 30", null, null, "Prioridad alta. Viewpoint y bajar solo hasta donde resulte cómodo."], ["13:45", "🚗", "Diamond → Atuh Beach", "10–20 min", "Diamond Beach", "Atuh Beach", ""], ["14:05", "🏖️", "Atuh Beach + comida", "1 h 30", null, null, ""], ["15:40", "📸", "Thousand Islands Viewpoint", "45–60 min", null, null, "Añadido: está en el mismo sector y completa muy bien el día este."], ["16:45", "🚗", "Regreso a Waterside", "45–60 min", null, "Waterside Inn Nusa Penida", ""], ["18:00", "🍽️", "Cena cerca del hotel", "libre", null, null, ""]]}, {"date": "2026-09-12", "label": "Sáb 12 sep", "base": "Nusa Penida · Waterside Inn", "summary": "Snorkel + Penida Oeste", "items": [["06:30", "🚗", "Waterside → Banjar Nyuh/Toyapakeh", "45–60 min", "Waterside Inn Nusa Penida", "Banjar Nyuh / Toyapakeh", "Conductor reservado."], ["07:30", "📍", "Snorkel Manta Point/Gamat", "2 h 30–3 h", null, null, "Operador decide puntos según mar."], ["10:45", "🚗", "Banjar Nyuh → Kelingking", "45–60 min", "Banjar Nyuh / Toyapakeh", "Kelingking Viewpoint", "Solo viewpoint. No descenso."], ["11:45", "📍", "Kelingking Viewpoint", "1 h 15", null, null, "Solo viewpoint. No descenso."], ["13:00", "🚗", "Kelingking → Broken Beach", "35–50 min", "Kelingking Viewpoint", "Broken Beach", "Solo viewpoint. No descenso."], ["13:50", "📍", "Broken Beach", "45 min", null, null, "Arco natural y costa."], ["14:35", "🚶", "Broken → Angel's Billabong", "10–15 min", "Broken Beach", "Angel's Billabong", "Solo mirador; no entrar al agua con oleaje."], ["14:50", "📍", "Angel's Billabong", "35–45 min", null, null, "Solo mirador; no entrar al agua con oleaje."], ["15:35", "🚗", "Angel's Billabong → Waterside", "60–80 min", "Angel's Billabong", "Waterside Inn Nusa Penida", "Solo mirador; no entrar al agua con oleaje."]]}, {"date": "2026-09-13", "label": "Dom 13 sep", "base": "Gili T · Quma Boutique", "summary": "Penida → Gili T: bici + sunset + noche", "items": [["08:30*", "🚗", "Waterside → puerto de salida", "10–60 min", "Waterside Inn Nusa Penida", "Sampalan Harbour", "Depende del operador; priorizar Sampalan."], ["09:30–10:30*", "⛴️", "Penida → Gili T", "~2–3 h", "Sampalan Harbour", "Gili T Harbour", "Horario/puerto por cerrar."], ["Al llegar", "🚶", "Gili Harbour → Quma", "18–25 min", "Gili T Harbour", "Quma Boutique Hotel", "Sin coches/motos; alternativa bici/cidomo."], ["15:00", "📍", "Check-in + playa norte/este", "1 h 30", null, null, ""], ["16:45", "🚲", "Quma → costa oeste / The Exile", "10–15 min", "Quma Boutique Hotel", "West Coast Sunset / The Exile", "Bici."], ["17:00", "📍", "Sunset costa oeste", "1 h 30", null, null, "Prioridad de la única noche."], ["18:40", "🚲", "Costa oeste → Night Market", "10–15 min", "West Coast Sunset / The Exile", "Gili Night Market", ""], ["19:00", "📍", "Night Market + noche", "libre", null, null, "Cena local + bares."]]}, {"date": "2026-09-14", "label": "Lun 14 sep", "base": "Ubud · Villa Kasili", "summary": "Turtle Point opcional → Padang Bai → Ubud", "items": [["06:45 opc.", "🤿", "Turtle Point desde la playa", "45–60 min", null, null, "Solo si el fast boat sale con margen suficiente. Actividad añadida de la auditoría."], ["08:00", "☕", "Desayuno en Quma + ducha", "45–60 min", null, null, "Desayuno incluido."], ["09:00 aprox.", "🚶", "Quma → Gili T Harbour", "18–25 min", "Quma Boutique Hotel", "Gili T Harbour", "Hora real depende del barco que compremos."], ["09:30 aprox.", "⛴️", "Gili T → Padang Bai", "1 h 30–2 h 30", "Gili T Harbour", "Padang Bai Harbour", "Objetivo: salida de mañana."], ["12:00 aprox.", "🚗", "Padang Bai → Villa Kasili", "75–105 min", "Padang Bai Harbour", "Villa Kasili", "Avisar al hotel de la hora prevista; check-in termina a las 18:00."], ["14:00", "🏨", "Villa Kasili + piscina / descanso", "2 h", null, null, ""], ["16:30", "💆", "Masaje opcional", "1–1 h 30", null, null, ""], ["19:00", "🍽️", "Cena Ubud", "libre", null, null, ""]]}, {"date": "2026-09-15", "label": "Mar 15 sep", "base": "Ubud · Villa Kasili", "summary": "Ubud centro + Sweet Orange Walk", "items": [["08:30", "🚗", "Villa Kasili → Monkey Forest", "10–20 min", "Villa Kasili", "Sacred Monkey Forest", ""], ["09:00", "🐒", "Sacred Monkey Forest", "1 h 30", null, null, ""], ["10:30", "🚶", "Monkey Forest → Ubud Art Market", "20–25 min", "Sacred Monkey Forest", "Ubud Art Market", ""], ["11:00", "🛍️", "Ubud Art Market", "45 min", null, null, ""], ["11:50", "🚶", "Market → Ubud Palace", "1–2 min", "Ubud Art Market", "Ubud Palace", ""], ["11:55", "🏯", "Ubud Palace", "30 min", null, null, ""], ["12:30", "🚶", "Palace → Pura Saraswati", "3–5 min", "Ubud Palace", "Pura Saraswati", ""], ["12:35", "🌺", "Pura Saraswati", "30–40 min", null, null, ""], ["13:15", "🍽️", "Comida en Ubud centro", "1 h 15", null, null, "Varias opciones en la pestaña Comidas."], ["14:45", "🚶", "Sweet Orange / Juwuk Manis Walk", "1 h 30–2 h", null, null, "Sustituye Campuhan: arrozales y paseo más tranquilo."], ["17:00", "☕", "Café / tiendas / tiempo libre", "1 h 30", null, null, ""], ["19:00", "🍽️", "Cena Ubud", "libre", null, null, ""]]}, {"date": "2026-09-16", "label": "Mié 16 sep", "base": "Ubud · The Apartments Ubud", "summary": "Tegallalang + Gunung Kawi + Tirta Empul", "items": [["07:45", "📍", "Checkout Villa Kasili; equipaje con conductor", "15 min", null, null, "Terminar en The Apartments."], ["08:00", "🚗", "Villa Kasili → Tegallalang", "35–50 min", "Villa Kasili", "Tegallalang Rice Terrace", "Salir pronto."], ["08:45", "📍", "Tegallalang Rice Terrace", "1 h 30", null, null, "Terrazas y paseo."], ["10:15", "🚗", "Tegallalang → Gunung Kawi", "20–30 min", "Tegallalang Rice Terrace", "Gunung Kawi Tampaksiring", ""], ["10:45", "📍", "Gunung Kawi Tampaksiring", "1 h 15–1 h 30", null, null, "Muy recomendado en foros; bastantes escaleras."], ["12:15", "🚗", "Gunung Kawi → Tirta Empul", "10–15 min", "Gunung Kawi Tampaksiring", "Tirta Empul", ""], ["12:30", "📍", "Tirta Empul", "1 h 15–1 h 45", null, null, "Más si hacéis melukat."], ["14:15 opc.", "🚗", "Tirta Empul → Pura Mengening", "5–10 min", "Tirta Empul", "Pura Mengening (optional)", "Solo si vais con energía."], ["15:00", "🚗", "Tampaksiring → The Apartments", "35–55 min", "Tirta Empul", "The Apartments Ubud", "Check-in + descanso."]]}, {"date": "2026-09-17", "label": "Jue 17 sep", "base": "Ubud · The Apartments Ubud", "summary": "Ayung + spa + compras (Batur como alternativa)", "items": [["08:30", "🚗", "The Apartments → zona Ayung/Sayan", "5–15 min", "The Apartments Ubud", "Ayung / Sayan rafting zone", "Plan por defecto. Mount Batur queda como alternativa pendiente."], ["09:00", "🚣", "Rafting en el Ayung", "3–4 h total", null, null, "Actividad divertida y compatible con un final de viaje relajado."], ["13:30", "🍽️", "Comida + descanso", "1 h 30", null, null, ""], ["15:00", "💆", "Spa / masaje / compras Ubud", "2–3 h", null, null, "También funciona como día colchón si algo falló antes."], ["18:30", "🍽️", "Cena final en Ubud", "libre", null, null, ""]]}, {"date": "2026-09-18", "label": "Vie 18 sep", "base": "Vuelo 19:20", "summary": "Ubud → DPS", "items": [["08:30", "📍", "Desayuno + mañana tranquila", "2 h", null, null, "No excursiones largas."], ["11:00", "📍", "Checkout The Apartments", "30 min", null, null, ""], ["12:15", "📍", "Comida temprana", "1 h", null, null, ""], ["13:15", "🚗", "The Apartments → DPS", "90–150 min", "The Apartments Ubud", "DPS Airport", "Salida conservadora; parada de souvenirs solo si tráfico fluido."], ["16:00 aprox.", "📍", "Objetivo: estar en DPS", "3 h 20 hasta vuelo", null, null, "Vuelo internacional 19:20."]]}], "coords": {"Wiras Village": [-8.6571833333, 115.1354833333], "Wayan House Seminyak": [-8.6909833333, 115.1701666667], "Rumah Menik": [-8.8043166667, 115.1413833333], "Mesari Homestay": [-8.7018833333, 115.2584833333], "Waterside Inn Nusa Penida": [-8.6810333333, 115.57485], "Quma Boutique Hotel": [-8.3459166667, 116.0409666667], "Villa Kasili": [-8.53355, 115.2526666667], "The Apartments Ubud": [-8.5018, 115.2448333333], "DPS Airport": [-8.74817, 115.16717], "Batu Bolong Beach": [-8.6478, 115.1385], "Echo Beach / La Brisa": [-8.65495, 115.12674], "Pererenan Beach": [-8.65865, 115.11967], "Tanah Lot": [-8.620526, 115.086121], "Seminyak Beach": [-8.69, 115.157], "Balangan Beach": [-8.793483, 115.122321], "Melasti Beach": [-8.892982, 115.172367], "Thomas Beach": [-8.81582, 115.09908], "Padang Padang Beach": [-8.811169, 115.103674], "Uluwatu Temple": [-8.829123, 115.084886], "Sanur Beach": [-8.7065, 115.2628], "Sanur Harbour": [-8.67035, 115.26247], "Sampalan Harbour": [-8.6748, 115.5673], "Goa Giri Putri": [-8.708951, 115.586115], "Diamond Beach": [-8.758534, 115.591986], "Atuh Beach": [-8.771469, 115.622758], "Banjar Nyuh / Toyapakeh": [-8.6806, 115.4865], "Kelingking Viewpoint": [-8.751385, 115.473204], "Broken Beach": [-8.769591, 115.470647], "Angel's Billabong": [-8.791879, 115.429279], "Gili T Harbour": [-8.35447, 116.04422], "West Coast Sunset / The Exile": [-8.35711, 116.0312], "Gili Night Market": [-8.35471, 116.04288], "Padang Bai Harbour": [-8.53138, 115.50811], "Sacred Monkey Forest": [-8.51875, 115.25877], "Ubud Art Market": [-8.50696, 115.26255], "Ubud Palace": [-8.50681, 115.26261], "Pura Saraswati": [-8.50572, 115.26173], "Campuhan Ridge Walk": [-8.50363, 115.25464], "Tegallalang Rice Terrace": [-8.43122, 115.27931], "Gunung Kawi Tampaksiring": [-8.423, 115.3123], "Tirta Empul": [-8.41557, 115.31557], "Pura Mengening (optional)": [-8.41187, 115.31202], "Ayung / Sayan rafting zone": [-8.4954, 115.2422]}, "food": {"Canggu": {"Desayuno": [["Crate Cafe", "Brunch y café · muy Canggu", "Rápido / popular"], ["The Shady Shack", "Brunch vegetariano y ambiente tranquilo", "Ligero"], ["12 Urban Cafe", "Desayunos internacionales y café", "Versátil"]], "Comida": [["Warung Bu Mi", "Indonesia local y económico", "Local"], ["Ji Restaurant Bali", "Japonés / sushi", "Más especial"], ["La Brisa Bali", "Comer junto a Echo Beach", "Por ubicación"]], "Cena": [["Ji Restaurant Bali", "Cena especial / sushi", "Especial"], ["Warung Bu Mi", "Indonesia económica", "Local"], ["12 Urban Cafe", "Fácil y variado", "Casual"]]}, "Seminyak": {"Desayuno": [["Sisterfields", "Brunch moderno", "Popular"], ["Baked Seminyak", "Café y panadería", "Rápido"], ["BKeto by Blue Karma", "Desayuno / brunch", "Alternativa"]], "Comida": [["Waroeng Bernadette", "Indonesia", "Mi favorita para comida local"], ["Sisterfields", "Brunch / internacional", "Seguro"], ["Seminyak Kitchen", "Internacional", "Variedad"]], "Cena": [["Motel Mexicola Seminyak", "Cena + ambiente", "Perfecto antes de salir"], ["Waroeng Bernadette", "Indonesia", "Más local"], ["Boy'N'Cow", "Carne / steakhouse", "Cena potente"]]}, "Uluwatu": {"Desayuno": [["Suka Espresso Uluwatu", "Café y brunch", "Mi primera opción"], ["Overhead Bali", "Desayuno / brunch", "Muy buena alternativa"], ["Gooseberry Restaurant", "Brunch cuidado", "Más especial"]], "Comida": [["Suka Espresso Uluwatu", "Casual / brunch", "Fácil"], ["Ulu Garden", "Comida casual cerca de Uluwatu", "Conveniente"], ["Mana Uluwatu", "Comida + vistas", "Ambiente"]], "Cena": [["Gooseberry Restaurant", "Cena cuidada", "Mi elección especial"], ["District 6", "Pizza / bar / casual", "Relajado"], ["Mana Uluwatu", "Cena + cocktails", "Vistas"]]}, "Sanur": {"Desayuno": [["Canvas Cafe Bali", "Café y desayuno", "Cerca de la zona del puerto"], ["Soul on the Beach", "Desayuno frente al mar", "Bonito"], ["Mesari Homestay", "Desayuno rápido / logística", "Si el barco sale temprano"]], "Comida": [["Warung Mak Beng", "Pescado / comida local", "Clásico"], ["Soul on the Beach", "Playa + comida", "Cómodo"], ["Massimo Italian Restaurant", "Italiano / gelato", "Alternativa occidental"]], "Cena": [["Sindhu Night Market", "Puestos locales", "Plan recomendado"], ["Soul on the Beach", "Cena frente al mar", "Tranquilo"], ["Massimo Italian Restaurant", "Italiano", "Seguro"]]}, "Nusa Penida": {"Desayuno": [["Waterside Inn Nusa Penida", "Desayuno incluido", "No gastar extra"], ["The Chill Penida", "Café / desayuno en Batumulapan", "Cerca del hotel"], ["Mambo Beach Restaurant", "Desayuno de playa", "Alternativa"]], "Comida": [["Warung The Sorent", "Cerca del sector Diamond/Atuh", "Día este"], ["Tropical Cliff Atuh Beach", "Comer junto a Atuh", "Día este"], ["Mambo Beach Restaurant", "Buena opción tras snorkel", "Día oeste"]], "Cena": [["The Chill Penida", "Muy cómoda desde Waterside", "Mi opción práctica"], ["Warung Forest", "Indonesia / casual", "Buena relación calidad-precio"], ["Mambo Beach Restaurant", "Cena de playa", "Ambiente"]]}, "Gili T": {"Desayuno": [["Quma Boutique Hotel", "Desayuno incluido", "Prioridad"], ["Hello Capitano Gili T", "Brunch / café", "Alternativa"], ["Gili Teak Resort Restaurant", "Desayuno con ambiente tranquilo", "Alternativa"]], "Comida": [["Tiki Grove", "Comida / cocktails", "Muy buena opción"], ["Pesona Lounge Trawangan", "India / fusión", "Diferente"], ["Lazy Coconut", "Seafood / playa", "Casual"]], "Cena": [["Gili T Night Market", "Puestos locales", "Plan recomendado"], ["Gili Teak Resort Restaurant", "Sunset + cena", "Bonito"], ["Tiki Grove", "Cena + cocktails", "Alternativa"]]}, "Ubud": {"Desayuno": [["Tablespoon Ubud", "Desayuno completo", "Seguro"], ["Sweet Orange Warung", "Perfecto con el paseo de arrozales", "Por ubicación"], ["Ivy Cafe Ubud", "Café / brunch", "Alternativa"]], "Comida": [["Warung Pondok Madu", "Costillas BBQ", "Mi favorita casual"], ["Social Monkeys Ubud", "Muy práctico tras Monkey Forest", "Por ubicación"], ["Warung Citta Ovest", "Pizza / italiano económico", "Alternativa"]], "Cena": [["Hujan Locale", "Indonesia moderna", "Cena especial"], ["Nusantara by Locavore", "Indonesia regional", "Experiencia"], ["Locavore NXT", "Alta gastronomía", "Capricho / reservar"], ["Zest Ubud", "Vegetal / ambiente", "Alternativa"]]}}, "hotels": [{"dates": "5–7 sep", "area": "Canggu", "name": "Wiras Village", "note": "Jalan Nelayan · buena base para Batu Bolong"}, {"dates": "7–8 sep", "area": "Seminyak", "name": "Wayan House Seminyak", "note": "Check-in 14:00–22:00 · checkout 11:30–12:00"}, {"dates": "8–10 sep", "area": "Uluwatu", "name": "Rumah Menik", "note": "Check-in 14:00–20:00 · checkout 08:00–12:00"}, {"dates": "10–11 sep", "area": "Sanur", "name": "Mesari Homestay", "note": "Check-in 14:00–22:00 · noche logística antes del barco"}, {"dates": "11–13 sep", "area": "Nusa Penida", "name": "Waterside Inn Nusa Penida", "note": "Batumulapan · costa este · desayuno incluido"}, {"dates": "13–14 sep", "area": "Gili T", "name": "Quma Boutique Hotel", "note": "Adults only · desayuno incluido · quiet zone desde 22:00"}, {"dates": "14–16 sep", "area": "Ubud", "name": "Villa Kasili", "note": "Check-in termina 18:00 · avisar llegada desde Gili"}, {"dates": "16–18 sep", "area": "Ubud", "name": "The Apartments Ubud", "note": "Sayan · muy práctico para Ayung · checkout 11:00–11:30"}], "decisions": [{"title": "Thomas vs Nyang Nyang", "when": "8 sep · Uluwatu", "status": "Por decidir", "text": "Thomas sigue como plan por comodidad. Nyang Nyang es la alternativa si priorizáis playa más salvaje y aceptáis más acceso/escaleras."}, {"title": "Fast boats", "when": "11, 13 y 14 sep", "status": "Pendiente de compra", "text": "Cerrar Sanur→Penida, Penida→Gili T y Gili T→Padang Bai. Los horarios de la app siguen siendo provisionales."}, {"title": "Turtle Point", "when": "14 sep · Gili T", "status": "Condicional", "text": "Hacer snorkel temprano solo si el fast boat de la mañana deja margen real para volver, desayunar y llegar al puerto."}, {"title": "Ayung vs Mount Batur", "when": "17 sep · Ubud", "status": "Por decidir", "text": "Ayung es el plan por defecto: divertido y relajado. Batur sería la alternativa más épica, pero exige madrugón fuerte y cambia todo el día."}], "transport": [{"icon": "🚗", "title": "Grab + Gojek", "text": "Instalar las dos. Comparar precio/espera. En cambios con equipaje usar coche; para trayectos cortos sin equipaje, moto solo si os sentís cómodos."}, {"icon": "✈️", "title": "5 sep · DPS → Canggu", "text": "4 adultos + equipaje: priorizar GrabCar XL / GoCar XL."}, {"icon": "⛴️", "title": "11 sep · Sanur → Penida", "text": "Prioridad logística: salida matinal y Sampalan si encaja con operador/horario."}, {"icon": "⛴️", "title": "13 sep · Penida → Gili T", "text": "Ideal desde Sampalan; si no existe una buena opción, usar Banjar Nyuh/Toyapakeh."}, {"icon": "⛴️", "title": "14 sep · Gili T → Padang Bai", "text": "Salida de mañana para llegar a Villa Kasili antes del fin del check-in."}, {"icon": "🚗", "title": "16 sep · cambio de hotel en Ubud", "text": "Llevar equipaje con conductor: Villa Kasili → Tegallalang → Gunung Kawi → Tirta Empul → The Apartments. No volver atrás."}], "placeSearch": {"Sindhu Night Market": "Sindhu Night Market Sanur Bali", "Thousand Islands Viewpoint": "Thousand Islands Viewpoint Nusa Penida", "Turtle Point": "Turtle Point Gili Trawangan", "Sweet Orange Walk": "Sweet Orange Walk Trail Ubud", "Nyang Nyang Beach": "Nyang Nyang Beach Uluwatu", "La Plancha": "La Plancha Bali Seminyak"}};
+const DAYS=APP_DATA.days, C=APP_DATA.coords, FOOD=APP_DATA.food, HOTELS=APP_DATA.hotels, DECISIONS=APP_DATA.decisions, TRANSPORT=APP_DATA.transport, PLACE_SEARCH=APP_DATA.placeSearch;
+let selected=pickInitialDay();
+let meal='Comida';
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function mapsSearch(name){
+ const q=PLACE_SEARCH[name] || name;
+ if(C[name]) return `https://www.google.com/maps/search/?api=1&query=${C[name][0]},${C[name][1]}`;
+ return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
+}
+function legUrl(a,b,icon){
+ const mode=icon==='🚶'?'walking':icon==='🚲'?'bicycling':'driving';
+ const origin=C[a]?`${C[a][0]},${C[a][1]}`:(a||'');
+ const dest=C[b]?`${C[b][0]},${C[b][1]}`:(b||'');
+ if(!origin||!dest) return '#';
+ return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&travelmode=${mode}`;
+}
+function routeForDay(d){
+ const pts=[];
+ d.items.forEach(x=>{
+   if(x[1]==='⛴️') return;
+   [x[4],x[5]].forEach(p=>{if(p && (!pts.length || pts[pts.length-1]!==p)) pts.push(p)});
+ });
+ if(pts.length<2) return mapsSearch(d.base.split('·').pop().trim());
+ const origin=C[pts[0]]?`${C[pts[0]][0]},${C[pts[0]][1]}`:pts[0];
+ const dest=C[pts[pts.length-1]]?`${C[pts[pts.length-1]][0]},${C[pts[pts.length-1]][1]}`:pts[pts.length-1];
+ const mids=pts.slice(1,-1).map(p=>C[p]?`${C[p][0]},${C[p][1]}`:p).slice(0,8);
+ return `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(dest)}&travelmode=driving${mids.length?'&waypoints='+mids.map(encodeURIComponent).join('%7C'):''}`;
+}
+function pickInitialDay(){
+ const today=new Date(); const iso=today.toISOString().slice(0,10);
+ const i=DAYS.findIndex(d=>d.date===iso);
+ if(i>=0) return i;
+ if(iso<DAYS[0].date) return 0;
+ return DAYS.length-1;
+}
+function goToday(){
+ selected=pickInitialDay(); renderStrip(); renderDay();
+ showView('dayView',document.querySelector('[data-view="dayView"]'));
+}
+function keyFor(d,j){return `bali26:${d.date}:${j}`}
+function isDone(d,j){return localStorage.getItem(keyFor(d,j))==='1'}
+function setDone(d,j,v){localStorage.setItem(keyFor(d,j),v?'1':'0');renderDay()}
+function resetDay(){
+ const d=DAYS[selected]; d.items.forEach((_,j)=>localStorage.removeItem(keyFor(d,j)));renderDay()
+}
+function nextIncomplete(d){
+ const idx=d.items.findIndex((_,j)=>!isDone(d,j));
+ return idx<0?null:{idx,item:d.items[idx]};
+}
+function renderStrip(){
+ const el=document.getElementById('dayStrip');
+ el.innerHTML=DAYS.map((d,i)=>`<button class="daypill ${i===selected?'active':''}" onclick="selectDay(${i})">${esc(d.label.replace(/^[A-Za-záéíóú]+ /,''))}</button>`).join('');
+ requestAnimationFrame(()=>el.querySelector('.active')?.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'}));
+}
+function selectDay(i){selected=i;renderStrip();renderDay();showView('dayView',document.querySelector('[data-view="dayView"]'))}
+function renderDay(){
+ const d=DAYS[selected], next=nextIncomplete(d);
+ const doneCount=d.items.filter((_,j)=>isDone(d,j)).length;
+ const pct=Math.round(doneCount/d.items.length*100);
+ const nextHtml=next?`
+   <div class="card blue"><div class="sectionhead"><div class="sectiontitle">Siguiente parada</div></div>
+   <div class="next"><div class="nexticon">${esc(next.item[1])}</div><div class="nextbody"><div class="nextname">${esc(next.item[2])}</div><div class="nextmeta">${esc(next.item[0])} · ${esc(next.item[3])}</div>
+   <div class="rowactions">${next.item[5]?`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch(next.item[5])}">📍 Abrir en Maps</a>`:''}</div></div></div></div>`
+   :`<div class="card good"><div class="sectiontitle">✅ Día completado</div><div class="small">Todo marcado. Puedes reiniciar las casillas si quieres reutilizar el plan.</div></div>`;
+ const steps=d.items.map((x,j)=>{
+   const [tm,ic,name,dur,a,b,note]=x, done=isDone(d,j);
+   const actions=[];
+   if(a&&b&&ic!=='⛴️') actions.push(`<a class="mini" target="_blank" rel="noopener" href="${legUrl(a,b,ic)}">🧭 Ruta</a>`);
+   if(b) actions.push(`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch(b)}">📍 Maps</a>`);
+   if(!b && /Sindhu Night Market/i.test(name)) actions.push(`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch('Sindhu Night Market')}">📍 Maps</a>`);
+   if(!b && /Thousand Islands/i.test(name)) actions.push(`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch('Thousand Islands Viewpoint')}">📍 Maps</a>`);
+   if(!b && /Turtle Point/i.test(name)) actions.push(`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch('Turtle Point')}">📍 Maps</a>`);
+   if(!b && /Sweet Orange/i.test(name)) actions.push(`<a class="mini" target="_blank" rel="noopener" href="${mapsSearch('Sweet Orange Walk')}">📍 Maps</a>`);
+   return `<div class="step"><div class="time">${esc(tm)}</div><div class="stepicon">${esc(ic)}</div><div class="stepbody ${done?'done':''}">
+    <div class="stephead"><input aria-label="Marcar completado" class="check" type="checkbox" ${done?'checked':''} onchange="setDone(DAYS[selected],${j},this.checked)"><div class="stepname">${esc(name)}</div><div class="duration">${esc(dur)}</div></div>
+    ${note?`<div class="note">${esc(note)}</div>`:''}<div class="rowactions">${actions.join('')}</div></div></div>`;
+ }).join('');
+ document.getElementById('dayView').innerHTML=`
+ <div class="hero"><div class="eyebrow">${esc(d.label)}</div><h2>${esc(d.summary)}</h2><div class="base">🏨 ${esc(d.base)}</div>
+ <div class="hero-actions"><a class="primary" target="_blank" rel="noopener" href="${routeForDay(d)}">🗺️ Ruta del día</a><button class="secondary" onclick="resetDay()">↺ Reiniciar checks</button></div>
+ <div class="progress"><div class="bar" style="width:${pct}%"></div></div><div class="progresslabel">${doneCount}/${d.items.length} completado · ${pct}%</div></div>
+ ${nextHtml}
+ <div class="card"><div class="sectionhead"><div class="sectiontitle">Plan del día</div></div><div class="timeline">${steps}</div></div>`;
+}
+function renderFood(){
+ const area=document.getElementById('foodArea').value || Object.keys(FOOD)[0];
+ const meals=FOOD[area];
+ document.getElementById('mealChips').innerHTML=Object.keys(meals).map(m=>`<button class="chip ${m===meal?'active':''}" onclick="meal='${m}';renderFood()">${m}</button>`).join('');
+ document.getElementById('foodList').innerHTML=meals[meal].map(r=>`
+  <div class="foodcard"><div class="foodtop"><div class="foodname">${esc(r[0])}</div><div class="tag">${esc(r[2])}</div></div>
+  <div class="fooddesc">${esc(r[1])}</div><div class="rowactions"><a class="mini" target="_blank" rel="noopener" href="${mapsSearch(r[0])}">📍 Maps</a></div></div>`).join('');
+}
+function initFood(){
+ const areas=Object.keys(FOOD);
+ document.getElementById('foodArea').innerHTML=areas.map(a=>`<option>${esc(a)}</option>`).join('');
+ renderFood();
+}
+function renderHotels(){
+ document.getElementById('hotelList').innerHTML=HOTELS.map(h=>`
+  <div class="hotel"><div class="hotelicon">🏨</div><div class="hotelbody"><div class="hotelname">${esc(h.name)}</div><div class="hotelmeta">${esc(h.dates)} · ${esc(h.area)}<br>${esc(h.note)}</div></div>
+  <a class="mini" target="_blank" rel="noopener" href="${mapsSearch(h.name)}">Maps</a></div>`).join('');
+}
+function renderDecisions(){
+ document.getElementById('decisionList').innerHTML=DECISIONS.map(d=>`
+  <div class="decision"><div class="decisiontop"><div><div class="decisiontitle">${esc(d.title)}</div><div class="fooddesc">${esc(d.when)}</div></div><div class="status">${esc(d.status)}</div></div><div class="note">${esc(d.text)}</div></div>`).join('');
+}
+function renderTransport(){
+ document.getElementById('transportList').innerHTML=TRANSPORT.map(t=>`
+  <div class="card ${t.icon==='⛴️'?'warn':'blue'}"><div class="sectionhead"><div class="sectiontitle">${esc(t.icon)} ${esc(t.title)}</div></div><div class="small">${esc(t.text)}</div></div>`).join('');
+}
+function showView(id,btn){
+ document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');
+ document.getElementById('dayStrip').classList.toggle('hidden',id!=='dayView');window.scrollTo(0,0);
+}
+async function shareTrip(){
+ try{
+  if(navigator.share) await navigator.share({title:'Bali 2026',text:'Itinerario Bali 2026',url:location.href});
+  else await navigator.clipboard.writeText(location.href);
+ }catch(e){}
+}
+if('serviceWorker' in navigator && location.protocol.startsWith('http')){
+ navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+renderStrip();renderDay();initFood();renderHotels();renderDecisions();renderTransport();
+</script>
+</body>
+</html>
